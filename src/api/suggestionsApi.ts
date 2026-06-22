@@ -1,28 +1,29 @@
 import { ApiSuggestion } from '../types';
 
-type JsonPlaceholderTodo = {
+type DummyJsonTodo = {
   id: number;
-  title: string;
+  todo: string;
+  completed: boolean;
 };
 
-const titleCase = (value: string) =>
-  value.charAt(0).toUpperCase() + value.slice(1);
+type DummyJsonTodoResponse = {
+  todos: DummyJsonTodo[];
+};
 
 export async function fetchTaskSuggestions(): Promise<ApiSuggestion[]> {
-  const response = await fetch(
-    'https://jsonplaceholder.typicode.com/todos?_limit=5',
-  );
+  const response = await fetch('https://dummyjson.com/todos?limit=5&skip=10');
 
   if (!response.ok) {
     throw new Error('Could not load task suggestions.');
   }
 
-  const data = (await response.json()) as JsonPlaceholderTodo[];
+  const data = (await response.json()) as DummyJsonTodoResponse;
 
-  return data.map((todo) => ({
+  return data.todos.map((todo) => ({
     id: todo.id,
-    title: titleCase(todo.title),
-    description: `Imported suggestion from JSONPlaceholder todo #${todo.id}.`,
+    title: todo.todo,
+    description: `Suggested task from DummyJSON. API status: ${
+      todo.completed ? 'completed' : 'active'
+    }.`,
   }));
 }
-

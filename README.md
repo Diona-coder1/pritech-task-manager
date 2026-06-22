@@ -12,7 +12,7 @@ React Native task manager app built for the PRITECH React Native technical chall
 - Search tasks by title
 - Filter tasks by status
 - Persist tasks locally with AsyncStorage
-- Fetch task suggestions from the public JSONPlaceholder API
+- Fetch task suggestions from the public DummyJSON API
 - Simple navigation between screens
 
 ## Tech Stack
@@ -51,5 +51,5 @@ The app manages personal tasks with title, description, status, and created date
 The public API used in this project is:
 
 ```text
-https://jsonplaceholder.typicode.com/todos?_limit=5
+https://dummyjson.com/todos?limit=5&skip=10
 ```
