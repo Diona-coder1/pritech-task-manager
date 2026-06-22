@@ -53,15 +53,14 @@ https://jsonplaceholder.typicode.com/todos?_limit=5
 
 ```text
 src/
+├── api/
 ├── components/
+├── context/
 ├── screens/
-├── navigation/
-├── services/
 ├── storage/
-├── types/
-└── utils/
+├── theme.ts
+└── types.ts
 ```
-
 ## Implemented Functionality
 
 Each task contains:
