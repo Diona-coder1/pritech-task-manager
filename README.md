@@ -1,55 +1,97 @@
 # PRITECH Task Manager
 
-React Native task manager app built for the PRITECH React Native technical challenge.
+A React Native task manager application built for the PRITECH React Native Technical Challenge.
 
 ## Features
 
-- Task list screen with empty state
-- Add a new task with input validation
+- View tasks in a clean task list
+- Add new tasks with input validation
 - Mark tasks as completed or active
 - Delete tasks
-- Task details screen
+- View task details
 - Search tasks by title
-- Filter tasks by status
-- Persist tasks locally with AsyncStorage
-- Fetch task suggestions from the public DummyJSON API
+- Filter tasks by status (All, Active, Done)
+- Persist tasks locally using AsyncStorage
+- Fetch task suggestions from a public API
 - Simple navigation between screens
+- Empty state handling
 
 ## Tech Stack
 
-- Expo SDK 54
 - React Native
+- Expo SDK 54
 - TypeScript
 - React Navigation
 - AsyncStorage
 
-## Setup
+## Installation
 
 ```bash
 npm install
 npm start
 ```
 
-Then open the project with Expo Go on a physical device, or run it on an emulator:
+Run on Android:
 
 ```bash
 npm run android
 ```
 
-For iOS on macOS:
+Run on iOS (macOS only):
 
 ```bash
 npm run ios
 ```
 
-## What Was Implemented
+## Public API
 
-The app manages personal tasks with title, description, status, and created date. Tasks are stored locally on the device, so they remain available after restarting the app. The home screen includes search and status filtering, plus task suggestions loaded from a public API. Users can open each task in a details screen, toggle its completion status, or delete it.
+Task suggestions are loaded from:
+
+https://jsonplaceholder.typicode.com/todos?_limit=5
+
+## Project Structure
+
+```text
+src/
+├── components/
+├── screens/
+├── navigation/
+├── services/
+├── storage/
+├── types/
+└── utils/
+```
+
+## Implemented Functionality
+
+Each task contains:
+
+- Title
+- Description
+- Status (Active / Completed)
+- Created Date
+
+Users can:
+
+- Create tasks
+- View task details
+- Update task status
+- Delete tasks
+- Search and filter tasks
+- Add suggestions from the API
+- Keep tasks stored locally after app restart
+
+## Screenshots
+
+### Home Screen
+![Home Screen](screenshots/Home.png)
+
+### Add Task Screen
+![Add Task Screen](screenshots/add_task.png)
+
+### Task Details Screen
+![Task Details Screen](screenshots/Details.png)
 
 ## Notes
 
-The public API used in this project is:
-
-```text
-https://dummyjson.com/todos?limit=5&skip=10
-```
+This project was developed as part of the PRITECH React Native Developer Technical Challenge.
