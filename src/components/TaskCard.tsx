@@ -1,6 +1,6 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
-import { colors, radius, spacing } from '../theme';
+import { colors, radius, shadow, spacing } from '../theme';
 import { Task } from '../types';
 
 type TaskCardProps = {
@@ -30,6 +30,12 @@ export default function TaskCard({
       onPress={() => onOpen(task.id)}
       style={styles.card}
     >
+      <View
+        style={[
+          styles.statusStrip,
+          task.completed ? styles.statusStripDone : styles.statusStripActive,
+        ]}
+      />
       <View style={styles.header}>
         <View style={styles.titleWrap}>
           <Text
@@ -65,10 +71,20 @@ export default function TaskCard({
         <Pressable
           accessibilityRole="button"
           onPress={() => onToggle(task.id)}
-          style={[styles.button, styles.primaryButton]}
+          style={[
+            styles.button,
+            task.completed ? styles.secondaryButton : styles.primaryButton,
+          ]}
         >
-          <Text style={styles.primaryButtonText}>
-            {task.completed ? 'Mark active' : 'Mark done'}
+          <Text
+            style={[
+              styles.buttonText,
+              task.completed
+                ? styles.secondaryButtonText
+                : styles.primaryButtonText,
+            ]}
+          >
+            {task.completed ? 'Set Active' : 'Complete'}
           </Text>
         </Pressable>
         <Pressable
@@ -76,7 +92,9 @@ export default function TaskCard({
           onPress={() => onDelete(task.id)}
           style={[styles.button, styles.deleteButton]}
         >
-          <Text style={styles.deleteButtonText}>Delete</Text>
+          <Text style={[styles.buttonText, styles.deleteButtonText]}>
+            Delete
+          </Text>
         </Pressable>
       </View>
     </Pressable>
@@ -95,7 +113,7 @@ const styles = StyleSheet.create({
     paddingVertical: spacing.xs,
   },
   badgeActive: {
-    backgroundColor: '#DBEAFE',
+    backgroundColor: colors.primarySoft,
   },
   badgeActiveText: {
     color: colors.primaryDark,
@@ -114,8 +132,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: radius.sm,
     flex: 1,
-    minHeight: 42,
+    minHeight: 44,
     justifyContent: 'center',
+  },
+  buttonText: {
+    fontSize: 14,
+    fontWeight: '800',
   },
   card: {
     backgroundColor: colors.surface,
@@ -123,7 +145,10 @@ const styles = StyleSheet.create({
     borderRadius: radius.md,
     borderWidth: 1,
     marginBottom: spacing.md,
+    overflow: 'hidden',
     padding: spacing.lg,
+    paddingLeft: spacing.xl,
+    ...shadow,
   },
   date: {
     color: colors.textMuted,
@@ -154,7 +179,25 @@ const styles = StyleSheet.create({
   },
   primaryButtonText: {
     color: colors.surface,
-    fontWeight: '800',
+  },
+  secondaryButton: {
+    backgroundColor: colors.primarySoft,
+  },
+  secondaryButtonText: {
+    color: colors.primaryDark,
+  },
+  statusStrip: {
+    bottom: 0,
+    left: 0,
+    position: 'absolute',
+    top: 0,
+    width: 5,
+  },
+  statusStripActive: {
+    backgroundColor: colors.primary,
+  },
+  statusStripDone: {
+    backgroundColor: colors.success,
   },
   title: {
     color: colors.text,
@@ -170,4 +213,3 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 });
-

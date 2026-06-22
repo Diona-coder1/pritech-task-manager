@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native';
 
-import { colors, radius, spacing } from '../theme';
+import { colors, radius, shadow, spacing } from '../theme';
 
 type EmptyStateProps = {
   title: string;
@@ -25,6 +25,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginTop: spacing.lg,
     padding: spacing.xl,
+    ...shadow,
   },
   message: {
     color: colors.textMuted,
@@ -39,4 +40,3 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
 });
-

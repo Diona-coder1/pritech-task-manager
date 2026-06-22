@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 
 import { useTasks } from '../context/TaskContext';
-import { colors, radius, spacing } from '../theme';
+import { colors, radius, shadow, spacing } from '../theme';
 import { RootStackParamList } from '../types';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'AddTask'>;
@@ -57,45 +57,56 @@ export default function AddTaskScreen({ navigation }: Props) {
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       style={styles.container}
     >
-      <View style={styles.form}>
-        <View>
-          <Text style={styles.label}>Title</Text>
-          <TextInput
-            autoCapitalize="sentences"
-            onChangeText={setTitle}
-            placeholder="Example: Prepare interview notes"
-            placeholderTextColor={colors.textMuted}
-            style={[styles.input, errors.title && styles.inputError]}
-            value={title}
-          />
-          {errors.title ? (
-            <Text style={styles.error}>{errors.title}</Text>
-          ) : null}
+      <View style={styles.content}>
+        <View style={styles.pageHeader}>
+          <Text style={styles.kicker}>New task</Text>
+          <Text style={styles.heading}>Create a clear action item</Text>
         </View>
 
-        <View>
-          <Text style={styles.label}>Description</Text>
-          <TextInput
-            multiline
-            onChangeText={setDescription}
-            placeholder="Add a short description for this task"
-            placeholderTextColor={colors.textMuted}
-            style={[styles.input, styles.textArea, errors.description && styles.inputError]}
-            textAlignVertical="top"
-            value={description}
-          />
-          {errors.description ? (
-            <Text style={styles.error}>{errors.description}</Text>
-          ) : null}
-        </View>
+        <View style={styles.form}>
+          <View>
+            <Text style={styles.label}>Title</Text>
+            <TextInput
+              autoCapitalize="sentences"
+              onChangeText={setTitle}
+              placeholder="Example: Prepare interview notes"
+              placeholderTextColor={colors.textMuted}
+              style={[styles.input, errors.title && styles.inputError]}
+              value={title}
+            />
+            {errors.title ? (
+              <Text style={styles.error}>{errors.title}</Text>
+            ) : null}
+          </View>
 
-        <Pressable
-          accessibilityRole="button"
-          onPress={handleSubmit}
-          style={styles.submitButton}
-        >
-          <Text style={styles.submitText}>Save Task</Text>
-        </Pressable>
+          <View>
+            <Text style={styles.label}>Description</Text>
+            <TextInput
+              multiline
+              onChangeText={setDescription}
+              placeholder="Add a short description for this task"
+              placeholderTextColor={colors.textMuted}
+              style={[
+                styles.input,
+                styles.textArea,
+                errors.description && styles.inputError,
+              ]}
+              textAlignVertical="top"
+              value={description}
+            />
+            {errors.description ? (
+              <Text style={styles.error}>{errors.description}</Text>
+            ) : null}
+          </View>
+
+          <Pressable
+            accessibilityRole="button"
+            onPress={handleSubmit}
+            style={styles.submitButton}
+          >
+            <Text style={styles.submitText}>Save Task</Text>
+          </Pressable>
+        </View>
       </View>
     </KeyboardAvoidingView>
   );
@@ -106,13 +117,37 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: spacing.lg,
   },
+  content: {
+    alignSelf: 'center',
+    maxWidth: 720,
+    width: '100%',
+  },
   error: {
     color: colors.danger,
     fontSize: 13,
     marginTop: spacing.xs,
   },
   form: {
+    backgroundColor: colors.surface,
+    borderColor: colors.border,
+    borderRadius: radius.md,
+    borderWidth: 1,
     gap: spacing.lg,
+    padding: spacing.lg,
+    ...shadow,
+  },
+  heading: {
+    color: colors.text,
+    fontSize: 26,
+    fontWeight: '900',
+    lineHeight: 32,
+  },
+  kicker: {
+    color: colors.primary,
+    fontSize: 12,
+    fontWeight: '900',
+    marginBottom: spacing.xs,
+    textTransform: 'uppercase',
   },
   input: {
     backgroundColor: colors.surface,
@@ -134,6 +169,9 @@ const styles = StyleSheet.create({
     fontWeight: '800',
     marginBottom: spacing.sm,
   },
+  pageHeader: {
+    marginBottom: spacing.xl,
+  },
   submitButton: {
     alignItems: 'center',
     backgroundColor: colors.primary,
@@ -150,4 +188,3 @@ const styles = StyleSheet.create({
     minHeight: 120,
   },
 });
-

@@ -17,7 +17,7 @@ import SegmentedFilter from '../components/SegmentedFilter';
 import SuggestionCard from '../components/SuggestionCard';
 import TaskCard from '../components/TaskCard';
 import { useTasks } from '../context/TaskContext';
-import { colors, radius, spacing } from '../theme';
+import { colors, radius, shadow, spacing } from '../theme';
 import { ApiSuggestion, RootStackParamList, Task, TaskFilter } from '../types';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Tasks'>;
@@ -65,6 +65,10 @@ export default function TaskListScreen({ navigation }: Props) {
     };
   }, [tasks]);
 
+  const completionRate = stats.total
+    ? Math.round((stats.completed / stats.total) * 100)
+    : 0;
+
   const filteredTasks = useMemo(() => {
     const normalizedSearch = searchTerm.trim().toLowerCase();
 
@@ -97,18 +101,33 @@ export default function TaskListScreen({ navigation }: Props) {
 
   const renderHeader = () => (
     <View style={styles.headerContent}>
-      <View style={styles.summary}>
-        <View>
-          <Text style={styles.kicker}>Today</Text>
-          <Text style={styles.heading}>Personal task board</Text>
+      <View style={styles.hero}>
+        <View style={styles.heroText}>
+          <Text style={styles.kicker}>PRITECH technical task</Text>
+          <Text style={styles.heading}>Personal task manager</Text>
+          <Text style={styles.subheading}>
+            {stats.active} active tasks, {completionRate}% completed
+          </Text>
         </View>
         <Pressable
           accessibilityRole="button"
           onPress={() => navigation.navigate('AddTask')}
           style={styles.addButton}
         >
-          <Text style={styles.addButtonText}>Add</Text>
+          <Text style={styles.addButtonText}>New Task</Text>
         </Pressable>
+      </View>
+
+      <View style={styles.progressCard}>
+        <View style={styles.progressHeader}>
+          <Text style={styles.progressLabel}>Completion progress</Text>
+          <Text style={styles.progressValue}>{completionRate}%</Text>
+        </View>
+        <View style={styles.progressTrack}>
+          <View
+            style={[styles.progressFill, { width: `${completionRate}%` }]}
+          />
+        </View>
       </View>
 
       <View style={styles.statsGrid}>
@@ -126,19 +145,24 @@ export default function TaskListScreen({ navigation }: Props) {
         </View>
       </View>
 
-      <TextInput
-        autoCapitalize="none"
-        onChangeText={setSearchTerm}
-        placeholder="Search tasks by title"
-        placeholderTextColor={colors.textMuted}
-        style={styles.searchInput}
-        value={searchTerm}
-      />
+      <View style={styles.toolbar}>
+        <TextInput
+          autoCapitalize="none"
+          onChangeText={setSearchTerm}
+          placeholder="Search tasks by title"
+          placeholderTextColor={colors.textMuted}
+          style={styles.searchInput}
+          value={searchTerm}
+        />
 
-      <SegmentedFilter value={filter} onChange={setFilter} />
+        <SegmentedFilter value={filter} onChange={setFilter} />
+      </View>
 
       <View style={styles.suggestionsHeader}>
-        <Text style={styles.sectionTitle}>API suggestions</Text>
+        <View>
+          <Text style={styles.sectionTitle}>Live API suggestions</Text>
+          <Text style={styles.sectionSubtitle}>Powered by DummyJSON</Text>
+        </View>
         {isLoadingSuggestions ? (
           <ActivityIndicator color={colors.primary} size="small" />
         ) : null}
@@ -162,7 +186,10 @@ export default function TaskListScreen({ navigation }: Props) {
         </ScrollView>
       ) : null}
 
-      <Text style={styles.sectionTitle}>Tasks</Text>
+      <View style={styles.tasksHeader}>
+        <Text style={styles.sectionTitle}>Tasks</Text>
+        <Text style={styles.sectionSubtitle}>{filteredTasks.length} shown</Text>
+      </View>
     </View>
   );
 
@@ -201,9 +228,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: colors.primary,
     borderRadius: radius.md,
-    minHeight: 44,
+    minHeight: 48,
     justifyContent: 'center',
-    paddingHorizontal: spacing.lg,
+    paddingHorizontal: spacing.xl,
   },
   addButtonText: {
     color: colors.surface,
@@ -215,26 +242,39 @@ const styles = StyleSheet.create({
     fontSize: 13,
   },
   headerContent: {
-    gap: spacing.lg,
-    marginBottom: spacing.md,
+    gap: spacing.xl,
+    marginBottom: spacing.lg,
   },
   heading: {
     color: colors.text,
-    fontSize: 26,
+    fontSize: 30,
     fontWeight: '900',
     letterSpacing: 0,
-    lineHeight: 32,
+    lineHeight: 36,
     marginTop: spacing.xs,
+  },
+  hero: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: spacing.lg,
+    justifyContent: 'space-between',
+  },
+  heroText: {
+    flex: 1,
   },
   kicker: {
     color: colors.primary,
-    fontSize: 13,
+    fontSize: 12,
     fontWeight: '800',
+    letterSpacing: 0,
     textTransform: 'uppercase',
   },
   listContent: {
+    alignSelf: 'center',
+    maxWidth: 980,
     padding: spacing.lg,
     paddingBottom: spacing.xl,
+    width: '100%',
   },
   loadingContainer: {
     alignItems: 'center',
@@ -256,13 +296,20 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '800',
   },
+  sectionSubtitle: {
+    color: colors.textMuted,
+    fontSize: 13,
+    marginTop: spacing.xs,
+  },
   statBox: {
     backgroundColor: colors.surface,
     borderColor: colors.border,
     borderRadius: radius.md,
     borderWidth: 1,
     flex: 1,
-    padding: spacing.md,
+    minHeight: 88,
+    padding: spacing.lg,
+    ...shadow,
   },
   statLabel: {
     color: colors.textMuted,
@@ -276,8 +323,49 @@ const styles = StyleSheet.create({
   },
   statValue: {
     color: colors.text,
-    fontSize: 22,
+    fontSize: 26,
     fontWeight: '900',
+  },
+  progressCard: {
+    backgroundColor: colors.surface,
+    borderColor: colors.border,
+    borderRadius: radius.md,
+    borderWidth: 1,
+    padding: spacing.lg,
+    ...shadow,
+  },
+  progressFill: {
+    backgroundColor: colors.success,
+    borderRadius: 999,
+    height: '100%',
+  },
+  progressHeader: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: spacing.md,
+  },
+  progressLabel: {
+    color: colors.text,
+    fontSize: 14,
+    fontWeight: '800',
+  },
+  progressTrack: {
+    backgroundColor: colors.successSoft,
+    borderRadius: 999,
+    height: 8,
+    overflow: 'hidden',
+  },
+  progressValue: {
+    color: colors.success,
+    fontSize: 14,
+    fontWeight: '900',
+  },
+  subheading: {
+    color: colors.textMuted,
+    fontSize: 15,
+    lineHeight: 22,
+    marginTop: spacing.sm,
   },
   suggestionList: {
     marginRight: -spacing.lg,
@@ -286,11 +374,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
     gap: spacing.sm,
+    justifyContent: 'space-between',
   },
-  summary: {
+  tasksHeader: {
     alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
+  toolbar: {
+    gap: spacing.md,
+  },
 });
-
