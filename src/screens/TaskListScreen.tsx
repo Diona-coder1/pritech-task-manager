@@ -145,19 +145,6 @@ export default function TaskListScreen({ navigation }: Props) {
         </View>
       </View>
 
-      <View style={styles.toolbar}>
-        <TextInput
-          autoCapitalize="none"
-          onChangeText={setSearchTerm}
-          placeholder="Search tasks by title"
-          placeholderTextColor={colors.textMuted}
-          style={styles.searchInput}
-          value={searchTerm}
-        />
-
-        <SegmentedFilter value={filter} onChange={setFilter} />
-      </View>
-
       <View style={styles.suggestionsHeader}>
         <View>
           <Text style={styles.sectionTitle}>Live API suggestions</Text>
@@ -189,6 +176,19 @@ export default function TaskListScreen({ navigation }: Props) {
       <View style={styles.tasksHeader}>
         <Text style={styles.sectionTitle}>Tasks</Text>
         <Text style={styles.sectionSubtitle}>{filteredTasks.length} shown</Text>
+      </View>
+
+      <View style={styles.toolbar}>
+        <TextInput
+          autoCapitalize="none"
+          onChangeText={setSearchTerm}
+          placeholder="Search saved tasks by title"
+          placeholderTextColor={colors.textMuted}
+          style={styles.searchInput}
+          value={searchTerm}
+        />
+
+        <SegmentedFilter value={filter} onChange={setFilter} />
       </View>
     </View>
   );
